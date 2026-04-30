@@ -136,15 +136,15 @@ export default function Home() {
     setLoading(true);
     setError(null);
     setResult(null);
-    setStage("Parsing problem statement");
+    setStage("Connecting");
 
     const stageTimers = [
-      setTimeout(() => setStage("Generating adversarial test cases"), 1500),
-      setTimeout(() => setStage("Compiling and executing your code"), 4500),
-      setTimeout(() => setStage("Analyzing failure mode"), 8000),
-      setTimeout(() => setStage("Synthesizing diagnosis"), 11500),
+      setTimeout(() => setStage("Waking up the server"), 3000),
+      setTimeout(() => setStage("Generating adversarial test cases"), 8000),
+      setTimeout(() => setStage("Compiling and executing your code"), 15000),
+      setTimeout(() => setStage("Analyzing failure mode"), 22000),
+      setTimeout(() => setStage("Synthesizing diagnosis"), 28000),
     ];
-
     try {
       const res = await fetch(`${API_URL}/analyze`, {
         method: "POST",
@@ -169,6 +169,12 @@ export default function Home() {
   }, [problem, code, language, loading]);
 
   // Ctrl+Enter shortcut
+  useEffect(() => {
+    fetch(`${API_URL}/health`).catch(() => {
+      // Silent fail — if the server is asleep, it'll wake regardless
+    });
+  }, []);
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
@@ -743,6 +749,7 @@ function AboutModal({ onClose }: { onClose: () => void }) {
           </Step>
           <div className="pt-3 mt-2 border-t border-[#27272D] text-xs text-[#8A8A93] font-mono space-y-1.5">
             <div className="text-[#5A5A63] uppercase tracking-wider mb-2">Caveats</div>
+            <p>· First request after idle takes ~30s while the free-tier server wakes up</p>
             <p>· Problems with multiple valid outputs may produce false positives</p>
             <p>· The LLM occasionally hallucinates expected outputs — verify before trusting</p>
             <p>· This is a learning tool, not a substitute for thinking</p>
