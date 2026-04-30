@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "SF Mono", monospace;
+
+  --color-bg: #0A0A0B;
+  --color-surface: #131316;
+  --color-surface-2: #1C1C21;
+  --color-border: #27272D;
+  --color-border-strong: #3A3A42;
+  --color-text: #E5E5EA;
+  --color-text-muted: #8A8A93;
+  --color-text-dim: #5A5A63;
+
+  --color-accent: #10B981;
+  --color-accent-dim: #064E3B;
+  --color-danger: #EF4444;
+  --color-danger-dim: #4C1414;
+  --color-warning: #F59E0B;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle background grid */
+body {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: -1px -1px;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-border-strong); }
+
+/* The signature: animated terminal cursor */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.terminal-cursor::after {
+  content: "▊";
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--color-accent);
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Scan line effect for "analyzing" state */
+@keyframes scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10%, 90% { opacity: 1; }
+  100% { transform: translateY(2000%); opacity: 0; }
+}
+.scan-line {
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  animation: scan 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Subtle entrance for results */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out backwards;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* Code blocks */
+pre, code, .font-mono {
+  font-family: var(--font-mono);
+}
